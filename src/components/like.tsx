@@ -15,14 +15,14 @@ const LikeButton: React.FC<Props> = ({ index }) => {
     if (liked || loading) return;
     try {
       setLoading(true);
-      await window.massa.wallet().callSmartContract({
-        targetAddress: CONTRACT_ADDRESS,
-        functionName: "likePost",
-        parameter: new Args().addU32(index).serialize(),
-        maxGas: "1000000",
-        fee: 0,
-        coins: 0,
-      });
+      await window.massa?.sendTransaction({
+      targetAddress: CONTRACT_ADDRESS,
+      functionName: "likePost",
+      parameter: new Args().addU32(BigInt(index)).serialize(),
+      maxGas: 100000n,
+      coins: 0n,
+      fee: 0n,
+    });
       setLiked(true);
     } catch (err) {
       console.error("Like failed", err);
