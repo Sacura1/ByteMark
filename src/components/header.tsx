@@ -4,7 +4,8 @@ import WalletContext from '../contexts/walletContex';
 const Header: React.FC = () => {
 
 
-const [walletAvailable, setWalletAvailable] = useState(false);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const [, setWalletAvailable] = useState(false);
 
 useEffect(() => {
   if (typeof window !== 'undefined' && window.massa) {
