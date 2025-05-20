@@ -1,7 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext,useEffect,useState } from 'react';
 import WalletContext from '../contexts/walletContex';
 
 const Header: React.FC = () => {
+
+
+const [walletAvailable, setWalletAvailable] = useState(false);
+
+useEffect(() => {
+  if (typeof window !== 'undefined' && window.massa) {
+    setWalletAvailable(true);
+  }
+}, []);
   const { address, connect, disconnect } = useContext(WalletContext);
 
   return (

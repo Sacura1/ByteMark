@@ -20,19 +20,21 @@ export const WalletProvider = ({ children }: WalletProviderProps) => {
   const [address, setAddress] = useState<string | null>(null);
 
   const connect = async () => {
-    try {
-      if (!window.massa) {
-        alert('Please install a Massa wallet extension like Bearby.');
-        return;
-      }
+  try {
+    // Delay to ensure window.massa is available after hydration
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
-      const userAddress = await window.massa.getAccount();
-      setAddress(userAddress);
-    } catch (error) {
-      console.error('Error connecting wallet:', error);
+    if (typeof window !== 'undefined' && !window.massa) {
+      alert('Please install a Massa wallet extension like Bearby.');
+      return;
     }
-  };
 
+    const userAddress = await window.massa!.getAccount();
+    setAddress(userAddress);
+  } catch (error) {
+    console.error('Error connecting wallet:', error);
+  }
+};
   const disconnect = () => {
     setAddress(null);
   };
