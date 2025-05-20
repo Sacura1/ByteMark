@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    background-color: gray 900;
+}
+
+
+/* src/styles/global.css */
+.ck-editor-dark .ck-content {
+  background: #1f2937 !important;
+  color: #f3f4f6 !important;
+  border-color: #374151 !important;
+  min-height: 300px;
+}
+
+.ck-editor-dark .ck-toolbar {
+  background: #111827 !important;
+  border-color: #374151 !important;
+}
