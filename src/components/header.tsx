@@ -1,55 +1,66 @@
-import React, { useContext,useEffect,useState } from 'react';
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import WalletContext from '../contexts/walletContex';
 
-const Header: React.FC = () => {
+// You may have additional imports here
 
+const Header = () => {
+  const { address, connect, disconnect, isConnecting } = useContext(WalletContext);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const [, setWalletAvailable] = useState(false);
+  // Format address for display (first 6 and last 4 characters)
+  const formatAddress = (addr: string) => {
+    return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`;
+  };
 
-useEffect(() => {
-  if (typeof window !== 'undefined' && window.massa) {
-    setWalletAvailable(true);
-  }
-}, []);
-  const { address, connect, disconnect } = useContext(WalletContext);
+  const handleWalletAction = async () => {
+    if (address) {
+      disconnect();
+    } else {
+      await connect();
+    }
+  };
 
   return (
-    <header className="bg-gray-900 text-gray-100 py-4 shadow-lg border-b border-gray-800">
-      <div className="container mx-auto max-w-7xl px-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">
-          <span className="bg-gradient-to-r from-red-600 to-red-400 bg-clip-text text-transparent">
-            Massa Blog
-          </span>
-        </h1>
-        
-        <div className="flex items-center space-x-4">
-          {address ? (
-            <>
-              <div className="hidden sm:flex items-center space-x-2 bg-gray-800 px-3 py-1.5 rounded-lg">
-                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                <span className="text-sm font-medium">
-                  {address.substring(0, 6)}...{address.substring(address.length - 4)}
-                </span>
-              </div>
-              <button
-                onClick={disconnect}
-                className="bg-red-800/30 hover:bg-red-800/40 text-red-400 px-4 py-2 rounded-md transition-all duration-200 
-                         border border-red-800/50 hover:border-red-800/70 text-sm font-medium"
-              >
-                Disconnect
-              </button>
-            </>
+    <header className="bg-white shadow-md">
+      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        {/* Your logo or site title */}
+        <Link to="/" className="text-xl font-bold text-blue-600">
+          Your App Name
+        </Link>
+
+        {/* Navigation links */}
+        <nav className="hidden md:flex items-center space-x-6">
+          <Link to="/" className="text-gray-700 hover:text-blue-600">
+            Home
+          </Link>
+          <Link to="/form" className="text-gray-700 hover:text-blue-600">
+            Create Post
+          </Link>
+          {/* Add more navigation links as needed */}
+        </nav>
+
+        {/* Wallet connect button */}
+        <button
+          onClick={handleWalletAction}
+          disabled={isConnecting}
+          className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
+        >
+          {isConnecting ? (
+            'Connecting...'
+          ) : address ? (
+            <span className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+              {formatAddress(address)}
+            </span>
           ) : (
-            <button
-              onClick={connect}
-              className="bg-red-600 hover:bg-red-700 px-6 py-2.5 rounded-md transition-all duration-200 
-                       text-sm font-semibold shadow-lg hover:shadow-red-900/20"
-            >
-              Connect Wallet
-            </button>
+            'Connect Wallet'
           )}
-        </div>
+        </button>
+
+        {/* Mobile menu button if needed */}
+        <button className="md:hidden">
+          {/* Your menu icon here */}
+        </button>
       </div>
     </header>
   );
